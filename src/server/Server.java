@@ -1,6 +1,7 @@
 package server;
 
 
+import JavaFXHelper.FXHelper;
 import controller.ServerController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -8,10 +9,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class Server extends Application {
+
+    private static boolean ISGIU = false;
 
     public static void main(String... args){
         if(args.length == 0){
+            ISGIU = true;
             launch(args);
         }
     }
@@ -29,7 +35,17 @@ public class Server extends Application {
 
         primaryStage.show();
 
+    }
 
 
+    public static boolean isISGIU() {
+        return ISGIU;
+    }
+
+    public static void alert(String title, String message) throws IOException {
+        if(ISGIU)
+            FXHelper.alertPopup(new Object(), title, message);
+        else
+            System.out.println(title+": "+message);
     }
 }
