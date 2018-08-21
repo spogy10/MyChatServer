@@ -16,6 +16,7 @@ public class Server extends Application {
     private static boolean ISGIU = false;
 
     public static void main(String... args){
+        ServerManager.startServer();
         if(args.length == 0){
             ISGIU = true;
             launch(args);
