@@ -12,7 +12,6 @@ public class ClientConnection extends ServerRequestProcessor implements Runnable
 
     private Socket connection;
 
-
     public ClientConnection(Socket connection) {
         this.userName = "temp";
         clientManager = ClientManager.getInstance();
