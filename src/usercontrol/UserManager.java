@@ -1,4 +1,4 @@
-package manager;
+package usercontrol;
 
 import lib.model.User;
 import server.Server;
@@ -76,7 +76,7 @@ public class UserManager {
         return success;
     }
 
-    public User retrieveUser(String userName){
+    public User retrieveUser(String userName){ //empty user if there is an error
         User user = new User();
         ObjectInputStream ois = null;
 
@@ -103,5 +103,11 @@ public class UserManager {
         }
         return user;
     }
+
+    public boolean doesUserExist(String userName){
+        return new File(FOLDER, userName).exists();
+    }
+
+
 
 }

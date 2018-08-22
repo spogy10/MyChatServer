@@ -1,17 +1,16 @@
 package server;
 
+import lib.communication.DataCarrier;
+import lib.communication.DC;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class ClientConnection implements Runnable {
+public class ClientConnection extends ServerRequestProcessor implements Runnable {
 
     private Socket connection;
-    private ObjectInputStream is;
-    private ObjectOutputStream os;
-    private String userName;
-    private ClientManager clientManager;
 
 
     public ClientConnection(Socket connection) {
@@ -34,11 +33,6 @@ public class ClientConnection implements Runnable {
         this.userName = userName;
     }
 
-    private void changeUserName(String userName){
-        if(clientManager.updateClientUsername(this.userName, userName))
-            this.userName = userName;
-    }
-
     private boolean initStreams() {
         try{
             if(connection == null)
@@ -57,10 +51,37 @@ public class ClientConnection implements Runnable {
 
     @Override
     public void run() {
+        action = "";
+        try{
+            while (!action.equals(DC.DISCONNECT)){
+                carrier = (DataCarrier) is.readObject();
+                action = carrier.getInfo();
+                response = new DataCarrier(DC.NO_ERROR,false);
+                if(carrier.isRequest()){
+                    switch (action){
+                        case DC.LOGIN_USER:
+                            loginUser();
+                            break;
+
+                        case DC.REGISTER_USER:
+                            registerUser();
+                            break;
+                    }
+
+
+
+                }else {//it is a response
+
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
 
     }
-
-
 
 
     public void closeConnection(){

@@ -54,7 +54,7 @@ public class ClientManager {
         return  false;
     }
 
-    public boolean userExists(String receiver){
+    public boolean userExists(String receiver){ //is the user online
         return clients.containsKey(receiver);
     }
 

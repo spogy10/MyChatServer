@@ -11,7 +11,7 @@ public class DataCarrier <T extends Serializable> implements  Serializable {
     private static final boolean RESPONSE = false;
 
     public DataCarrier(boolean request){
-        this("", null, request);
+        this("noinfo", null, request);
     }
 
     public DataCarrier(String info, boolean request){
@@ -19,7 +19,7 @@ public class DataCarrier <T extends Serializable> implements  Serializable {
     }
 
     public DataCarrier(T data, boolean request){
-        this("", data, request);
+        this("noinfo", data, request);
     }
 
     public DataCarrier(String info, T data, boolean request){
