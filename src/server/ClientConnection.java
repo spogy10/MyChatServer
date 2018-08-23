@@ -1,16 +1,19 @@
 package server;
 
-import lib.communication.DataCarrier;
-import lib.communication.DC;
+import communication.DataCarrier;
+import communication.DC;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ClientConnection extends ServerRequestProcessor implements Runnable {
 
     private Socket connection;
+    DataCarrier tempResponseHolder;
+    AtomicBoolean unreadResponse = new AtomicBoolean(false);
 
     public ClientConnection(Socket connection) {
         this.userName = "temp";
@@ -54,22 +57,13 @@ public class ClientConnection extends ServerRequestProcessor implements Runnable
         try{
             while (!action.equals(DC.DISCONNECT)){
                 carrier = (DataCarrier) is.readObject();
-                action = carrier.getInfo();
-                response = new DataCarrier(DC.NO_ERROR,false);
                 if(carrier.isRequest()){
-                    switch (action){
-                        case DC.LOGIN_USER:
-                            loginUser();
-                            break;
-
-                        case DC.REGISTER_USER:
-                            registerUser();
-                            break;
-                    }
-
-
-
+                    action = carrier.getInfo();
+                    response = new DataCarrier(DC.NO_ERROR,false);
+                    caseStatements();
                 }else {//it is a response
+                    tempResponseHolder = carrier;
+                    unreadResponse.compareAndSet(false, true);
 
                 }
             }
@@ -80,6 +74,45 @@ public class ClientConnection extends ServerRequestProcessor implements Runnable
         }
 
 
+    }
+
+    private void caseStatements() throws IOException {
+        switch (action){
+            case DC.LOGIN_USER:
+                loginUser();
+                break;
+
+            case DC.REGISTER_USER:
+                registerUser();
+                break;
+        }
+    }
+
+    private DataCarrier sendRequest(DataCarrier request, boolean responseRequired){
+        DataCarrier response = new DataCarrier(DC.SERVER_CONNECTION_ERROR, false);
+        try{
+            os.writeObject(request);
+            System.out.println(userName+": Request: "+request.getInfo()+" sent");
+            if(responseRequired) {
+                response = waitForResponse();
+                System.out.println(userName+": Response for "+request.getInfo()+" received");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        return response;
+    }
+
+    private DataCarrier waitForResponse() {
+        while(!unreadResponse.get()){
+            /*wait until response comes in*/
+            Thread.onSpinWait();
+        }
+
+        unreadResponse.compareAndSet(true, false);
+        return tempResponseHolder;
     }
 
 

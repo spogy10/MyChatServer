@@ -1,6 +1,6 @@
 package usercontrol;
 
-import lib.model.User;
+import model.User;
 import server.Server;
 
 import java.io.*;
@@ -13,7 +13,7 @@ public class UserManager {
     private static final File FOLDER = new File(FOLDERNAME);
 
 
-    public static UserManager getInstance(){
+    public final static UserManager getInstance(){
         if(instance == null)
             instance = new UserManager();
 

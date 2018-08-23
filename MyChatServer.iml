@@ -2,6 +2,12 @@
 <module type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../../AndroidStudioProjects/MyChat/app/src/main/java/communication">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../AndroidStudioProjects/MyChat/app/src/main/java/communication" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../../../AndroidStudioProjects/MyChat/app/src/main/java/model">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../AndroidStudioProjects/MyChat/app/src/main/java/model" isTestSource="false" />
+    </content>
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>

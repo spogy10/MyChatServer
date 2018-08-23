@@ -4,6 +4,7 @@ package server;
 import JavaFXHelper.FXHelper;
 import controller.ServerController;
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,12 +16,24 @@ public class Server extends Application {
 
     private static boolean ISGIU = false;
 
-    public static void main(String... args){
-        ServerManager.startServer();
+    public static void main(String... args) throws Exception {
+
         if(args.length == 0){
+            Task t = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    ServerManager.startServer();
+                    return null;
+                }
+            };
+
+            new Thread(t).start();
             ISGIU = true;
             launch(args);
+        } else{
+            ServerManager.startServer();
         }
+
     }
 
     @Override

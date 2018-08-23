@@ -1,22 +1,22 @@
 package usercontrol;
 
-import lib.communication.DC;
-import lib.communication.DataCarrier;
-import lib.model.User;
+import communication.DC;
+import communication.DataCarrier;
+import model.User;
 
 public class UserProcessor {
 
     private UserManager manager = UserManager.getInstance();
     private static UserProcessor instance = null;
 
-    public static UserProcessor getInstance(){
+    public final static UserProcessor getInstance(){
         if(instance == null)
             instance = new UserProcessor();
 
         return instance;
     }
 
-    public UserProcessor() {
+    private UserProcessor() {
     }
 
     public DataCarrier loginUser(String[] loginDetails) {

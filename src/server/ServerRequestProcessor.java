@@ -1,8 +1,8 @@
 package server;
 
-import lib.communication.DC;
-import lib.communication.DataCarrier;
-import lib.model.User;
+import communication.DC;
+import communication.DataCarrier;
+import model.User;
 import usercontrol.UserProcessor;
 
 import java.io.IOException;
