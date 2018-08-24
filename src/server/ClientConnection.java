@@ -16,6 +16,7 @@ public class ClientConnection extends ServerRequestProcessor implements Runnable
     AtomicBoolean unreadResponse = new AtomicBoolean(false);
 
     public ClientConnection(Socket connection) {
+
         this.userName = "temp";
         clientManager = ClientManager.getInstance();
         this.connection = connection;
@@ -68,9 +69,15 @@ public class ClientConnection extends ServerRequestProcessor implements Runnable
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            if(e.toString().equals("java.net.SocketException: Connection reset") || e.toString().equals("java.io.EOFException"))
+                System.out.println(userName+" disconnected from server");
+            else
+                e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        } finally {
+            close();
+            clientManager.removeClient(userName);
         }
 
 

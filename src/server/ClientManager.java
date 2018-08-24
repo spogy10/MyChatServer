@@ -1,5 +1,7 @@
 package server;
 
+import javafx.application.Platform;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,11 +29,24 @@ public class ClientManager {
 
         con.setUserName(userName);
         clients.put(userName, con);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Server.numberOfClients.increment();
+            }
+        });
+        System.out.println("Username updated from temp to "+userName);
     }
 
 
     public void removeClient(String userName){
         clients.remove(userName);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Server.numberOfClients.decrement();
+            }
+        });
     }
 
     private String generateRandomName(){
@@ -62,4 +77,5 @@ public class ClientManager {
         for(ClientConnection c : clients.values())
             c.closeConnection();
     }
+
 }

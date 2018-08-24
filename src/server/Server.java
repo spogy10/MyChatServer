@@ -4,6 +4,9 @@ package server;
 import JavaFXHelper.FXHelper;
 import controller.ServerController;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,23 +14,23 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Server extends Application {
 
     private static boolean ISGIU = false;
+    public static BindableAtomicInteger numberOfClients = new BindableAtomicInteger(0);
 
     public static void main(String... args) throws Exception {
 
         if(args.length == 0){
-            Task t = new Task<Void>() {
-                @Override
-                protected Void call() throws Exception {
-                    ServerManager.startServer();
-                    return null;
-                }
-            };
 
-            new Thread(t).start();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    ServerManager.startServer();
+                }
+            }).start();
             ISGIU = true;
             launch(args);
         } else{
@@ -49,6 +52,7 @@ public class Server extends Application {
 
         primaryStage.show();
 
+
     }
 
 
@@ -57,9 +61,37 @@ public class Server extends Application {
     }
 
     public static void alert(String title, String message) throws IOException {
-        if(ISGIU)
-            FXHelper.alertPopup(new Object(), title, message);
+        if(ISGIU){
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        FXHelper.alertPopup(this, title, message);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
         else
             System.out.println(title+": "+message);
+    }
+
+    public static class BindableAtomicInteger extends AtomicInteger{
+        public static SimpleIntegerProperty number = new SimpleIntegerProperty(0);
+
+        public BindableAtomicInteger(int initialValue){
+            super(initialValue);
+            number.set(0);
+        }
+
+
+        public void increment(){
+            number.set(super.incrementAndGet());
+        }
+
+        public void decrement(){
+            number.set(super.decrementAndGet());
+        }
     }
 }

@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
@@ -9,6 +10,7 @@ import java.util.ResourceBundle;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import server.Server;
 
 import static java.lang.System.exit;
 
@@ -30,6 +32,6 @@ public class ServerController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        lableNumberOfClients.textProperty().bind(Server.BindableAtomicInteger.number.asString());
     }
 }

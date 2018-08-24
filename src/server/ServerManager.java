@@ -2,11 +2,12 @@ package server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 
 public class ServerManager {
 
     ServerSocket serverSocket;
-    private ClientManager clientManager;
+    private ClientManager clientManager = ClientManager.getInstance();
 
     private static ServerManager ourInstance;
 
@@ -37,6 +38,8 @@ public class ServerManager {
             while(true){
                 clientManager.addClient(new ClientConnection(serverSocket.accept()));
                 System.out.println("connection received");
+
+
             }
         } catch (IOException e) {
             e.printStackTrace();
