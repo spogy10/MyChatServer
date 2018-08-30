@@ -8,6 +8,7 @@ import usercontrol.UserProcessor;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Map;
 
 public class ServerRequestProcessor {
 
@@ -46,11 +47,21 @@ public class ServerRequestProcessor {
             String userName = ((User) response.getData()).getUserName();
             if(clientManager.userExists(userName))
                 response.setInfo(DC.ALREADY_LOGGED_IN);
-            else
+            else{
                 changeUserName(userName);
+                ((User) response.getData()).setContacts(updateContactStatus(((User) response.getData()).getContacts()));
+            }
         }
         os.writeObject(response);
         notifyResponse(action);
+    }
+
+    private Map<String, Boolean> updateContactStatus(Map<String, Boolean> contacts) {
+        for(String contact : contacts.keySet()){
+            contacts.put(contact, clientManager.userExists(contact));
+        }
+
+        return contacts;
     }
 
     protected void registerUser() throws IOException {

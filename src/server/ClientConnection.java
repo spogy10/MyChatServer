@@ -12,8 +12,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ClientConnection extends ServerRequestProcessor implements Runnable {
 
     private Socket connection;
-    DataCarrier tempResponseHolder;
-    AtomicBoolean unreadResponse = new AtomicBoolean(false);
+    private DataCarrier tempResponseHolder;
+    private AtomicBoolean unreadResponse = new AtomicBoolean(false);
 
     public ClientConnection(Socket connection) {
 
