@@ -4,6 +4,7 @@ import model.User;
 import server.Server;
 
 import java.io.*;
+import java.util.Map;
 
 public class UserManager {
 
@@ -13,8 +14,8 @@ public class UserManager {
     private static final File FOLDER = new File(FOLDERNAME);
 
 
-    public final static UserManager getInstance(){
-        if(instance == null)
+    public final static UserManager getInstance() {
+        if (instance == null)
             instance = new UserManager();
 
         return instance;
@@ -28,7 +29,7 @@ public class UserManager {
             if (!FOLDER.exists() || !FOLDER.isDirectory()) {
                 if (FOLDER.mkdir()) {
                     Server.alert("Alert", "Folder Created");
-                }else{
+                } else {
                     Server.alert("Error", "Unable to create folder");
                 }
 
@@ -42,11 +43,11 @@ public class UserManager {
 
     }
 
-    public boolean saveUser(User user){
+    public boolean saveUser(User user) {
 
         boolean success = false;
         ObjectOutputStream oos = null;
-        try{
+        try {
             File userFile = new File(FOLDER, user.getUserName());
 
             oos = new ObjectOutputStream(new FileOutputStream(userFile));
@@ -76,11 +77,11 @@ public class UserManager {
         return success;
     }
 
-    public User retrieveUser(String userName){ //empty user if there is an error
+    public User retrieveUser(String userName) { //empty user if there is an error
         User user = new User();
         ObjectInputStream ois = null;
 
-        try{
+        try {
             File userFile = new File(FOLDER, userName);
             ois = new ObjectInputStream(new FileInputStream(userFile));
 
@@ -93,7 +94,7 @@ public class UserManager {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
-            if(ois != null)
+            if (ois != null)
                 try {
                     ois.close();
                 } catch (IOException e) {
@@ -104,10 +105,47 @@ public class UserManager {
         return user;
     }
 
-    public boolean doesUserExist(String userName){
+    public boolean doesUserExist(String userName) {
         return new File(FOLDER, userName).exists();
     }
 
+    public static void mutateUserFile(String userName, Map<String, Boolean> contacts) {
+        User user = new User();
+        ObjectInputStream ois = null;
+
+        try {
+            File userFile = new File(FOLDER, userName);
+            ois = new ObjectInputStream(new FileInputStream(userFile));
+
+            user = (User) ois.readObject();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        user.getContacts().putAll(contacts);
+
+        ObjectOutputStream oos = null;
+        try {
+            File userFile = new File(FOLDER, user.getUserName());
+
+            oos = new ObjectOutputStream(new FileOutputStream(userFile));
+
+            oos.writeObject(user);
+            oos.flush();
+
+            oos.close();
 
 
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
 }

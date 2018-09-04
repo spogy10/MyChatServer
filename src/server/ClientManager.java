@@ -73,6 +73,23 @@ public class ClientManager {
         return clients.containsKey(receiver);
     }
 
+    public boolean handleUserGoingOnline(String userName, String contactName){
+        if(userExists(contactName)){
+
+            clients.get(contactName).notifyContactOnline(userName, true);
+            return true;
+        }
+
+        return false;
+    }
+
+    public void handleUserGoingOffline(String userName, Map<String, Boolean> contacts){ //todo: implement this
+
+        for(String contactName : contacts.keySet())
+            if(userExists(contactName))
+                clients.get(contactName).notifyContactOnline(userName, false);
+    }
+
     public void closeAllConnections(){
         for(ClientConnection c : clients.values())
             c.closeConnection();

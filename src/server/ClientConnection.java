@@ -28,6 +28,12 @@ public class ClientConnection extends ServerRequestProcessor implements Runnable
         }
     }
 
+    public void notifyContactOnline(String contactName, boolean online){
+        String info = online? DC.CONTACT_ONLINE : DC.CONTACT_OFFLINE;
+        DataCarrier<String> request = new DataCarrier<>(info, contactName, true);
+        sendRequest(request, false);
+    }
+
     public String getUserName() {
         return userName;
     }

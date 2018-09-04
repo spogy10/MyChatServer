@@ -12,8 +12,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import usercontrol.UserManager;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Server extends Application {
@@ -22,6 +25,8 @@ public class Server extends Application {
     public static BindableAtomicInteger numberOfClients = new BindableAtomicInteger(0);
 
     public static void main(String... args) throws Exception {
+
+
 
         if(args.length == 0){
 
@@ -33,7 +38,13 @@ public class Server extends Application {
             }).start();
             ISGIU = true;
             launch(args);
-        } else{
+        } else if(args[0].equals("3")){
+            Map<String, Boolean> map = new HashMap<>();
+            map.put("poliver", false);
+            UserManager.mutateUserFile("poliverjr", map);
+            System.exit(0);
+
+        }else{
             ServerManager.startServer();
         }
 
