@@ -58,7 +58,7 @@ public class ServerRequestProcessor {
 
     private Map<String, Boolean> updateContactStatus(Map<String, Boolean> contacts) {
         for(String contact : contacts.keySet()){
-            contacts.put(contact, clientManager.userExists(contact));
+            contacts.put(contact, clientManager.handleUserGoingOnline(userName, contact));
         }
 
         return contacts;

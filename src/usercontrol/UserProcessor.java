@@ -4,6 +4,9 @@ import communication.DC;
 import communication.DataCarrier;
 import model.User;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class UserProcessor {
 
     private UserManager manager = UserManager.getInstance();
@@ -53,5 +56,16 @@ public class UserProcessor {
         response.setInfo(DC.NO_ERROR);
 
         return response;
+    }
+
+    public Map<String, Boolean> userGoesOffline(String userName){
+        Map<String, Boolean> contacts = new HashMap<>();
+        if(!manager.doesUserExist(userName))
+            return contacts;
+
+        User user = manager.retrieveUser(userName);
+        contacts = user.getContacts();
+
+        return contacts;
     }
 }
