@@ -40,7 +40,6 @@ public class ServerRequestProcessor {
 
 
     protected void loginUser() throws IOException {
-        notifyRequest(action);
         String[] loginDetails = (String[]) carrier.getData();
         response = userProcessor.loginUser(loginDetails);
         if(response.getData() != null){
@@ -65,7 +64,6 @@ public class ServerRequestProcessor {
     }
 
     protected void registerUser() throws IOException {
-        notifyRequest(action);
         String[] loginDetails = (String[]) carrier.getData();
         response = userProcessor.createUser(loginDetails);
         if(((Boolean) response.getData()))
@@ -73,5 +71,13 @@ public class ServerRequestProcessor {
 
         os.writeObject(response);
         notifyResponse(action);
+    }
+
+    protected void addContact(){
+
+    }
+
+    protected void removeContact(){
+
     }
 }

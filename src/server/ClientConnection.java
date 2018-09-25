@@ -67,6 +67,7 @@ public class ClientConnection extends ServerRequestProcessor implements Runnable
                 if(carrier.isRequest()){
                     action = carrier.getInfo();
                     response = new DataCarrier(DC.NO_ERROR,false);
+                    notifyRequest(action);
                     caseStatements();
                 }else {//it is a response
                     tempResponseHolder = carrier;
@@ -89,14 +90,23 @@ public class ClientConnection extends ServerRequestProcessor implements Runnable
 
     }
 
-    private void caseStatements() throws IOException {
+    private void caseStatements() throws IOException { //todo DC.ADD_CONTACT, DC.REMOVE_CONTACT
         switch (action){
             case DC.LOGIN_USER:
+
                 loginUser();
                 break;
 
             case DC.REGISTER_USER:
                 registerUser();
+                break;
+
+            case DC.ADD_CONTACT:
+                addContact();
+                break;
+
+            case DC.REMOVE_CONTACT:
+                removeContact();
                 break;
         }
     }
