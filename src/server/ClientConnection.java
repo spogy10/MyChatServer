@@ -34,6 +34,17 @@ public class ClientConnection extends ServerRequestProcessor implements Runnable
         sendRequest(request, false);
     }
 
+    public void addContact(String contactName, Boolean online){
+        Object[] contact = new Object[]{contactName, online};
+        DataCarrier<Object[]> request = new DataCarrier<Object[]>(DC.ADD_CONTACT, contact, true);
+        sendRequest(request, false);
+    }
+
+    public void removeContact(String contactName){
+        DataCarrier<String> request = new DataCarrier<>(DC.REMOVE_CONTACT, contactName, true);
+        sendRequest(request, false);
+    }
+
     public String getUserName() {
         return userName;
     }

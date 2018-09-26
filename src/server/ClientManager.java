@@ -1,7 +1,6 @@
 package server;
 
 import javafx.application.Platform;
-import usercontrol.UserManager;
 import usercontrol.UserProcessor;
 
 import java.util.HashMap;
@@ -44,7 +43,7 @@ public class ClientManager {
 
     public void removeClient(String userName){
 
-        handleUserGoingOffline(userName, userProcessor.userGoesOffline(userName));
+        handleUserGoingOffline(userName, userProcessor.getUserContacts(userName));
 
         clients.remove(userName);
         Platform.runLater(new Runnable() {
@@ -87,6 +86,17 @@ public class ClientManager {
         }
 
         return false;
+    }
+
+    public void addContact(String addingUser, String addedUser){
+        boolean addingUserOnline = userExists(addingUser);
+        boolean addedUserOnline = userExists(addedUser);
+
+        if(addingUserOnline)
+            clients.get(addingUser).addContact(addedUser, addedUserOnline);
+
+        if(addedUserOnline)
+            clients.get(addedUser).addContact(addingUser, addingUserOnline);
     }
 
     public void handleUserGoingOffline(String userName, Map<String, Boolean> contacts){ //todo: implement this when user logs out

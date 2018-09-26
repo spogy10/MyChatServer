@@ -58,7 +58,7 @@ public class UserProcessor {
         return response;
     }
 
-    public Map<String, Boolean> userGoesOffline(String userName){
+    public Map<String, Boolean> getUserContacts(String userName){
         Map<String, Boolean> contacts = new HashMap<>();
         if(!manager.doesUserExist(userName))
             return contacts;
@@ -67,5 +67,25 @@ public class UserProcessor {
         contacts = user.getContacts();
 
         return contacts;
+    }
+
+    public DataCarrier addContact(String addingUserName, String addedUserName){
+        DataCarrier<Boolean> response = new DataCarrier<Boolean>(false, false);
+        if(!manager.doesUserExist(addedUserName)) {
+            response.setInfo(DC.USERNAME_DOES_NOT_EXIST);
+            return response;
+        }
+
+        User addingUser = manager.retrieveUser(addingUserName);
+        addingUser.getContacts().put(addedUserName, false);
+
+        User addedUser = manager.retrieveUser(addedUserName);
+        addedUser.getContacts().put(addingUserName, false);
+
+        response.setData(manager.saveUser(addingUser) && manager.saveUser(addedUser));
+
+        response.setInfo(DC.NO_ERROR);
+
+        return response;
     }
 }

@@ -73,8 +73,14 @@ public class ServerRequestProcessor {
         notifyResponse(action);
     }
 
-    protected void addContact(){
-
+    protected void addContact() throws IOException { //todo test it
+        String contactName = (String) carrier.getData();
+        response = userProcessor.addContact(userName, contactName);
+        if((Boolean) response.getData()){
+            clientManager.addContact(userName, contactName);
+        }
+        os.writeObject(response);
+        notifyResponse(action);
     }
 
     protected void removeContact(){
