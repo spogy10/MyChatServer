@@ -6,13 +6,13 @@ import usercontrol.UserProcessor;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ClientManager {
+ class ClientManager {
 
-    private Map<String, ClientConnection> clients = null;
+    private Map<String, ClientConnection> clients;
     private static ClientManager instance = null;
     private UserProcessor userProcessor = UserProcessor.getInstance();
 
-    public static ClientManager getInstance(){
+     static ClientManager getInstance(){
         if(instance == null)
             instance = new ClientManager();
         return instance;
@@ -22,7 +22,7 @@ public class ClientManager {
         clients = new HashMap<>();
     }
 
-    public void addClient(ClientConnection con){
+     void addClient(ClientConnection con){
         String userName = "";
         do{
             userName = generateRandomName();
@@ -33,7 +33,7 @@ public class ClientManager {
         clients.put(userName, con);
         Platform.runLater(new Runnable() {
             @Override
-            public void run() {
+             public void run() {
                 Server.numberOfClients.increment();
             }
         });
@@ -41,14 +41,14 @@ public class ClientManager {
     }
 
 
-    public void removeClient(String userName){
+     void removeClient(String userName){
 
         handleUserGoingOffline(userName, userProcessor.getUserContacts(userName));
 
         clients.remove(userName);
         Platform.runLater(new Runnable() {
             @Override
-            public void run() {
+             public void run() {
                 Server.numberOfClients.decrement();
             }
         });
@@ -58,11 +58,11 @@ public class ClientManager {
         return (Math.random()*4000)+"";
     }
 
-    public ClientConnection getClient(String userName){
+     ClientConnection getClient(String userName){
         return clients.get(userName);
     }
 
-    public boolean updateClientUsername(String oldUsername, String newUsername){
+     boolean updateClientUsername(String oldUsername, String newUsername){
         if(clients.containsKey(oldUsername) && !clients.containsKey(newUsername)){
             ClientConnection temp = clients.get(oldUsername);
             clients.remove(oldUsername);
@@ -74,11 +74,11 @@ public class ClientManager {
         return  false;
     }
 
-    public boolean userExists(String receiver){ //is the user online
+     boolean userExists(String receiver){ //is the user online
         return clients.containsKey(receiver);
     }
 
-    public boolean handleUserGoingOnline(String userName, String contactName){
+     boolean handleUserGoingOnline(String userName, String contactName){
         if(userExists(contactName)){
 
             clients.get(contactName).notifyContactOnline(userName, true);
@@ -88,7 +88,7 @@ public class ClientManager {
         return false;
     }
 
-    public void addContact(String addingUser, String addedUser){
+    void addContact(String addingUser, String addedUser){
         boolean addingUserOnline = userExists(addingUser);
         boolean addedUserOnline = userExists(addedUser);
 
@@ -99,25 +99,23 @@ public class ClientManager {
             clients.get(addedUser).addContact(addingUser, addingUserOnline);
     }
 
-     protected void removeContact(String removingUser, String removedUser){
-        boolean removingUserOnline = userExists(removingUser);
-        boolean removedUserOnline = userExists(removedUser);
+    void removeContact(String removingUser, String removedUser){
 
-        if(removingUserOnline)
+        if(userExists(removingUser))
             clients.get(removingUser).removeContact(removedUser);
 
-        if(removedUserOnline)
+        if(userExists(removedUser))
             clients.get(removedUser).removeContact(removingUser);
     }
 
-    public void handleUserGoingOffline(String userName, Map<String, Boolean> contacts){ //todo: implement this when user logs out
+     private void handleUserGoingOffline(String userName, Map<String, Boolean> contacts){ //todo: implement this when user logs out
 
         for(String contactName : contacts.keySet())
             if(userExists(contactName))
                 clients.get(contactName).notifyContactOnline(userName, false);
     }
 
-    public void closeAllConnections(){
+     void closeAllConnections(){
         for(ClientConnection c : clients.values())
             c.closeConnection();
     }

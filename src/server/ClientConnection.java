@@ -9,13 +9,13 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class ClientConnection extends ServerRequestProcessor implements Runnable {
+ class ClientConnection extends ServerRequestProcessor implements Runnable {
 
     private Socket connection;
     private DataCarrier tempResponseHolder;
     private AtomicBoolean unreadResponse = new AtomicBoolean(false);
 
-    public ClientConnection(Socket connection) {
+     ClientConnection(Socket connection) {
 
         this.userName = "temp";
         clientManager = ClientManager.getInstance();
@@ -28,24 +28,24 @@ public class ClientConnection extends ServerRequestProcessor implements Runnable
         }
     }
 
-    public void notifyContactOnline(String contactName, boolean online){
+     void notifyContactOnline(String contactName, boolean online){
         String info = online? DC.CONTACT_ONLINE : DC.CONTACT_OFFLINE;
         DataCarrier<String> request = new DataCarrier<>(info, contactName, true);
         sendRequest(request, false);
     }
 
-    public void addContact(String contactName, Boolean online){
+     void addContact(String contactName, Boolean online){
         Object[] contact = new Object[]{contactName, online};
         DataCarrier<Object[]> request = new DataCarrier<Object[]>(DC.ADD_CONTACT, contact, true);
         sendRequest(request, false);
     }
 
-    public void removeContact(String contactName){
+     void removeContact(String contactName){
         DataCarrier<String> request = new DataCarrier<>(DC.REMOVE_CONTACT, contactName, true);
         sendRequest(request, false);
     }
 
-    public String getUserName() {
+     String getUserName() {
         return userName;
     }
 
@@ -70,7 +70,7 @@ public class ClientConnection extends ServerRequestProcessor implements Runnable
 
 
     @Override
-    public void run() {
+     public void run() {
         action = "";
         try{
             while (!action.equals(DC.DISCONNECT)){
@@ -150,7 +150,7 @@ public class ClientConnection extends ServerRequestProcessor implements Runnable
     }
 
 
-    public void closeConnection(){
+     void closeConnection(){
         close();
     }
 
