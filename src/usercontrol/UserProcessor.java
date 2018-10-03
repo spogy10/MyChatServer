@@ -69,6 +69,7 @@ public class UserProcessor {
         return contacts;
     }
 
+
     public DataCarrier addContact(String addingUserName, String addedUserName){
         DataCarrier<Boolean> response = new DataCarrier<Boolean>(false, false);
         if(!manager.doesUserExist(addedUserName)) {
@@ -83,6 +84,28 @@ public class UserProcessor {
         addedUser.getContacts().put(addingUserName, false);
 
         response.setData(manager.saveUser(addingUser) && manager.saveUser(addedUser));
+
+        response.setInfo(DC.NO_ERROR);
+
+        return response;
+    }
+
+
+    public DataCarrier removeContact(String removingUserName, String removedUserName) {
+        DataCarrier<Boolean> response = new DataCarrier<Boolean>(false, false);
+
+        User removingUser = manager.retrieveUser(removingUserName);
+        removingUser.getContacts().remove(removedUserName);
+
+        if(!manager.doesUserExist(removedUserName)){
+            response.setInfo(DC.USERNAME_DOES_NOT_EXIST);
+            return response;
+        }
+
+        User removedUser = manager.retrieveUser(removedUserName);
+        removedUser.getContacts().remove(removingUserName);
+
+        response.setData(manager.saveUser(removingUser) && manager.saveUser(removedUser));
 
         response.setInfo(DC.NO_ERROR);
 

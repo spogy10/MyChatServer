@@ -99,6 +99,17 @@ public class ClientManager {
             clients.get(addedUser).addContact(addingUser, addingUserOnline);
     }
 
+     protected void removeContact(String removingUser, String removedUser){
+        boolean removingUserOnline = userExists(removingUser);
+        boolean removedUserOnline = userExists(removedUser);
+
+        if(removingUserOnline)
+            clients.get(removingUser).removeContact(removedUser);
+
+        if(removedUserOnline)
+            clients.get(removedUser).removeContact(removingUser);
+    }
+
     public void handleUserGoingOffline(String userName, Map<String, Boolean> contacts){ //todo: implement this when user logs out
 
         for(String contactName : contacts.keySet())

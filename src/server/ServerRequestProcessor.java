@@ -83,7 +83,15 @@ public class ServerRequestProcessor {
         notifyResponse(action);
     }
 
-    protected void removeContact(){
+    protected void removeContact() throws IOException {
+        String contactName = (String) carrier.getData();
+        response = userProcessor.removeContact(userName, contactName);
 
+        if((Boolean) response.getData()){
+            clientManager.removeContact(userName, contactName);
+        }
+
+        os.writeObject(response);
+        notifyResponse(action);
     }
 }
