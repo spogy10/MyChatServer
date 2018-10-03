@@ -101,7 +101,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
     }
 
-    private void caseStatements() throws IOException { //todo DC.ADD_CONTACT, DC.REMOVE_CONTACT
+    private void caseStatements() throws IOException {
         switch (action){
             case DC.LOGIN_USER:
 

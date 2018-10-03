@@ -73,7 +73,7 @@ public class ServerRequestProcessor {
         notifyResponse(action);
     }
 
-    protected void addContact() throws IOException { //todo test it
+    protected void addContact() throws IOException {
         String contactName = (String) carrier.getData();
         response = userProcessor.addContact(userName, contactName);
         if((Boolean) response.getData()){

@@ -108,7 +108,7 @@ import java.util.Map;
             clients.get(removedUser).removeContact(removingUser);
     }
 
-     private void handleUserGoingOffline(String userName, Map<String, Boolean> contacts){ //todo: implement this when user logs out
+     private void handleUserGoingOffline(String userName, Map<String, Boolean> contacts){
 
         for(String contactName : contacts.keySet())
             if(userExists(contactName))
