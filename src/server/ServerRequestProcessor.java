@@ -10,7 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Map;
 
-public class ServerRequestProcessor {
+ public class ServerRequestProcessor {
 
     protected ObjectInputStream is;
     protected ObjectOutputStream os;
@@ -55,7 +55,7 @@ public class ServerRequestProcessor {
         notifyResponse(action);
     }
 
-    private Map<String, Boolean> updateContactStatus(Map<String, Boolean> contacts) {
+    protected Map<String, Boolean> updateContactStatus(Map<String, Boolean> contacts) {
         for(String contact : contacts.keySet()){
             contacts.put(contact, clientManager.handleUserGoingOnline(userName, contact));
         }
