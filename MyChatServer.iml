@@ -14,5 +14,6 @@
     <orderEntry type="jdk" jdkName="11" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="JavaFXHelper11" level="project" />
+    <orderEntry type="library" name="JavaFXHelper11 (2)" level="project" />
   </component>
 </module>

@@ -69,8 +69,8 @@ public class Server extends Application {
             public void handle(WindowEvent event) {
                 event.consume();
                 try {
-                    FXHelper.closeProgram(this, primaryStage);
-                    System.exit(0);
+                    if(FXHelper.closeProgram(this, primaryStage))
+                        System.exit(0);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
